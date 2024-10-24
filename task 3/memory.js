@@ -74,17 +74,17 @@ function displayCards(){
 }
 
 function flipCard() {
-    if(flippedcards.length < 2 && this.classList.contains('active')){
-         let cardId = this.getAttribute('id');
-         flippedcards.push(this);
-         this.classList.remove('cardback');
-         this.innerHTML = cardsArray[cardId].icon;
-         if(flippedcards.length == 2){
-            setTimeout(checkMatch,1000);
-         }
+    if (flippedcards.length < 2 && this.classList.contains('active') && flippedcards[0] !== this) {
+        let cardId = this.getAttribute('id');
+        flippedcards.push(this);
+        this.classList.remove('cardback');
+        this.innerHTML = cardsArray[cardId].icon;
+        if (flippedcards.length == 2) {
+            setTimeout(checkMatch, 1000);
+        }
     }
-   
 }
+
 
 function checkMatch() {
     const card1id = flippedcards[0].getAttribute('id');
@@ -116,7 +116,7 @@ function checkGameOver() {
             gameBoard.removeChild(gameBoard.firstChild);
         }
 
-        gameBoard.innerHTML = '<h2 class="celebrate">You Won!</h2><button id="playAgain">Play Again</button>';
+        gameBoard.innerHTML = '<h2 class="celebrate">You Won!</h2>';
         gameBoard.classList.remove('game');
         gameBoard.classList.add('won');
 
@@ -127,13 +127,24 @@ function checkGameOver() {
         document.body.style.backgroundColor = "#ffefd5";
 
         launchConfetti();
-
         startFireworks();
-
-        document.getElementById('playAgain').addEventListener('click', () => {
-            location.reload(); 
-        });
+        setTimeout(resetGame, 3000);
     }
+}
+
+
+
+function resetGame() {
+    gameBoard.innerHTML = '';
+    gameBoard.classList.remove('won');
+    gameBoard.classList.add('game');
+    flippedcards = [];
+    matchedParis = 0;
+
+    shuffleCards();
+    displayCards();
+
+    document.body.style.backgroundColor = "#f5e8ba";
 }
 
 
